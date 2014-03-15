@@ -10,7 +10,7 @@ namespace pwr_algorithms.test
 {
     [TestFixture]
     public class Class1
-    {   
+    {
         [Test]
         public void GivenVectorOfRandomNumbersThenBubbleSort()
         {
@@ -27,13 +27,22 @@ namespace pwr_algorithms.test
             Assert.AreEqual(expectedVector, result);
         }
 
-        
+        [Test]
+        public void GivenVectorOfNumbersThenSwapTwoValues()
+        {
+            int[] vector = { 1, 2, 3, 4, 5 };
+            int[] expected = { 1, 4, 3, 2, 5 };
+
+            vector.Swap(1, 3);
+
+            Assert.AreEqual(expected, vector);
+        }     
 
         private int[] BubbleSort(int[] vectorToSort)
         {
             int n = vectorToSort.Length;
 
-            for (int z = 0; n > z; n-- )
+            for (int z = 0; n > z; n--)
             {
                 for (int i = 0; i < n - 1; i++)
                 {
@@ -43,17 +52,25 @@ namespace pwr_algorithms.test
                         int b = vectorToSort[i + 1];
                         vectorToSort[i] = b;
                         vectorToSort[i + 1] = a;
-                        
+
                     }
 
                 }
             }
 
-            return vectorToSort; 
-          
+            return vectorToSort;
+
         }
 
     }
 
-
+    public static class VectorHelper
+    {
+        public static void Swap(this int[] baseVector, int baseIndex, int swapIndex)
+        {
+            var tempBaseValue = baseVector[baseIndex];
+            baseVector[baseIndex] = baseVector[swapIndex];
+            baseVector[swapIndex] = tempBaseValue;
+        }
+    }
 }
