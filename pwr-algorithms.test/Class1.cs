@@ -36,7 +36,48 @@ namespace pwr_algorithms.test
             vector.Swap(1, 3);
 
             Assert.AreEqual(expected, vector);
-        }     
+        }        
+
+        [Test]
+        public void GivenVectorOfRandomNumbersThenSelectionSort()
+        {
+            int[] vectorToSort = { 9, 2, 78, 6, 2, 30, 8, 1, 11 };
+            int[] expectedVector = { 1, 2, 2, 6, 8, 9, 11, 30, 78 };
+
+            int[] result = SelectionSort(vectorToSort);
+
+            Assert.AreEqual(expectedVector, result);
+            
+        }
+
+        private int[] SelectionSort(int[] vectorToSort)
+        {
+            int startIndex = 0;
+            int stepsCount = vectorToSort.Length - 1;
+
+            for (int i = 0; i < vectorToSort.Length; i++)
+            {
+                int lowestValueIndex = startIndex;
+
+                for (int j = startIndex; j < vectorToSort.Length; j++)
+                {  
+                    if (vectorToSort[j] < vectorToSort[lowestValueIndex])
+                    {
+                        lowestValueIndex = j;
+                    }
+
+                    if (j == stepsCount)
+                    {
+                        vectorToSort.Swap(startIndex, lowestValueIndex);
+                    }
+                }      
+  
+                ++startIndex;             
+            }
+
+            return vectorToSort;
+
+        }        
 
         private int[] BubbleSort(int[] vectorToSort)
         {
