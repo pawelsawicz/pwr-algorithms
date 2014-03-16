@@ -50,6 +50,45 @@ namespace pwr_algorithms.test
             
         }
 
+        [Test]
+        public void GivenVectorOfRandomNumbersThenCountingSort()
+        {
+            //arrange
+            int[] vector = { 2, 3, 1, 7, 2, 6, 4, 3 };
+            int[] expectedVector = { 1, 2, 2, 3, 3, 4, 6, 7 };
+            int maxValue = 8;
+            
+            //act
+            int[] result = CountingSort(vector, maxValue);
+
+            //assert
+            Assert.AreEqual(expectedVector, result);
+
+        }
+
+        private int[] CountingSort(int[] vectorToSort, int maxValue)
+        {
+            int[] sortedVector = new int[vectorToSort.Length];
+            int[] countVector = new int[vectorToSort.Length];
+
+            for (int i = 0; i < vectorToSort.Length; i++)
+            {
+                countVector[vectorToSort[i]] += 1;
+            }
+
+            for (int i = 1; i < maxValue; i++)
+            {
+                countVector[i] += countVector[i - 1];
+            }
+
+            for (int i = vectorToSort.Length -1 ; i >= 0; --i)
+            {
+                sortedVector[--countVector[vectorToSort[i]]] = vectorToSort[i];
+            }
+
+            return sortedVector;
+        }
+
         private int[] SelectionSort(int[] vectorToSort)
         {
             int startIndex = 0;
