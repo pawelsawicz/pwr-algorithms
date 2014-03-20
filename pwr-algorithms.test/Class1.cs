@@ -11,6 +11,14 @@ namespace pwr_algorithms.test
     [TestFixture]
     public class Class1
     {
+        private SortAlgorithms _sortAlgorithms { get; set; }
+
+        [SetUp]
+        public void SetUp()
+        {
+            _sortAlgorithms = new SortAlgorithms();
+        }
+
         [Test]
         public void GivenVectorOfRandomNumbersThenBubbleSort()
         {
@@ -19,9 +27,7 @@ namespace pwr_algorithms.test
             int[] expectedVector = { 1, 1, 3, 4, 6, 10, 99 };
 
             //act
-            int[] result = BubbleSort(vectorToSort);
-
-
+            int[] result = _sortAlgorithms.BubbleSort(vectorToSort);
 
             //assert
             Assert.AreEqual(expectedVector, result);
@@ -36,7 +42,7 @@ namespace pwr_algorithms.test
             vector.Swap(1, 3);
 
             Assert.AreEqual(expected, vector);
-        }        
+        }
 
         [Test]
         public void GivenVectorOfRandomNumbersThenSelectionSort()
@@ -44,10 +50,10 @@ namespace pwr_algorithms.test
             int[] vectorToSort = { 9, 2, 78, 6, 2, 30, 8, 1, 11 };
             int[] expectedVector = { 1, 2, 2, 6, 8, 9, 11, 30, 78 };
 
-            int[] result = SelectionSort(vectorToSort);
+            int[] result = _sortAlgorithms.SelectionSort(vectorToSort);
 
             Assert.AreEqual(expectedVector, result);
-            
+
         }
 
         [Test]
@@ -57,9 +63,9 @@ namespace pwr_algorithms.test
             int[] vector = { 2, 3, 1, 7, 2, 6, 4, 3 };
             int[] expectedVector = { 1, 2, 2, 3, 3, 4, 6, 7 };
             int maxValue = 8;
-            
+
             //act
-            int[] result = CountingSort(vector, maxValue);
+            int[] result = _sortAlgorithms.CountingSort(vector, maxValue);
 
             //assert
             Assert.AreEqual(expectedVector, result);
@@ -76,15 +82,29 @@ namespace pwr_algorithms.test
             int right = vectorToSort.Length - 1;
 
             //act
-            int[] result = QuickSort(vectorToSort, left, right);
+            int[] result = _sortAlgorithms.QuickSort(vectorToSort, left, right);
 
 
 
             //assert
             Assert.AreEqual(expectedVector, result);
-        }        
+        }
+        
+    }
 
-        private int[] CountingSort(int[] vectorToSort, int maxValue)
+    public static class VectorHelper
+    {
+        public static void Swap(this int[] baseVector, int baseIndex, int swapIndex)
+        {
+            var tempBaseValue = baseVector[baseIndex];
+            baseVector[baseIndex] = baseVector[swapIndex];
+            baseVector[swapIndex] = tempBaseValue;
+        }
+    }
+
+    public class SortAlgorithms
+    {
+        public int[] CountingSort(int[] vectorToSort, int maxValue)
         {
             int[] sortedVector = new int[vectorToSort.Length];
             int[] countVector = new int[vectorToSort.Length];
@@ -99,7 +119,7 @@ namespace pwr_algorithms.test
                 countVector[i] += countVector[i - 1];
             }
 
-            for (int i = vectorToSort.Length -1 ; i >= 0; --i)
+            for (int i = vectorToSort.Length - 1; i >= 0; --i)
             {
                 sortedVector[--countVector[vectorToSort[i]]] = vectorToSort[i];
             }
@@ -107,7 +127,7 @@ namespace pwr_algorithms.test
             return sortedVector;
         }
 
-        private int[] SelectionSort(int[] vectorToSort)
+        public int[] SelectionSort(int[] vectorToSort)
         {
             int startIndex = 0;
             int stepsCount = vectorToSort.Length - 1;
@@ -117,7 +137,7 @@ namespace pwr_algorithms.test
                 int lowestValueIndex = startIndex;
 
                 for (int j = startIndex; j < vectorToSort.Length; j++)
-                {  
+                {
                     if (vectorToSort[j] < vectorToSort[lowestValueIndex])
                     {
                         lowestValueIndex = j;
@@ -127,16 +147,16 @@ namespace pwr_algorithms.test
                     {
                         vectorToSort.Swap(startIndex, lowestValueIndex);
                     }
-                }      
-  
-                ++startIndex;             
+                }
+
+                ++startIndex;
             }
 
             return vectorToSort;
 
         }
 
-        private int[] QuickSort(int[] vectorToSort, int startIndex, int endIndex)
+        public int[] QuickSort(int[] vectorToSort, int startIndex, int endIndex)
         {
             int i = startIndex;
             int j = endIndex;
@@ -162,7 +182,7 @@ namespace pwr_algorithms.test
 
         }
 
-        private int[] BubbleSort(int[] vectorToSort)
+        public int[] BubbleSort(int[] vectorToSort)
         {
             int n = vectorToSort.Length;
 
@@ -181,18 +201,8 @@ namespace pwr_algorithms.test
             return vectorToSort;
 
         }
-
     }
 
-    public static class VectorHelper
-    {
-        public static void Swap(this int[] baseVector, int baseIndex, int swapIndex)
-        {
-            var tempBaseValue = baseVector[baseIndex];
-            baseVector[baseIndex] = baseVector[swapIndex];
-            baseVector[swapIndex] = tempBaseValue;
-        }       
-        
-    }
-    
+
+
 }
