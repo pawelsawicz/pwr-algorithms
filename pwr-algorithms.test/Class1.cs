@@ -72,8 +72,8 @@ namespace pwr_algorithms.test
             //arrange
             int[] vectorToSort = { 4, 10, 3, 1, 1, 6, 99 };
             int[] expectedVector = { 1, 1, 3, 4, 6, 10, 99 };
-            int left=0;
-            int right=vectorToSort.Length-1;
+            int left = 0;
+            int right = vectorToSort.Length - 1;
 
             //act
             int[] result = QuickSort(vectorToSort, left, right);
@@ -204,34 +204,27 @@ namespace pwr_algorithms.test
 
         }
 
-        private int[] QuickSort(int[] vectorToSort, int left, int right)
+        private int[] QuickSort(int[] vectorToSort, int startIndex, int endIndex)
         {
-            int i = left;
-            int j = right;
-            int x = vectorToSort[(left + right) / 2];
+            int i = startIndex;
+            int j = endIndex;
 
+            var x = vectorToSort[(startIndex + endIndex) >> 1];
             do
             {
-                while (vectorToSort[i] < x)
-                    i++;
-                while (vectorToSort[j] > x)
-                    j--;
+                while (vectorToSort[i].CompareTo(x) < 0) i++;
+                while (vectorToSort[j].CompareTo(x) > 0) j--;
+
                 if (i <= j)
                 {
-                    int a = vectorToSort[i];
-                    int b = vectorToSort[j];
-                    vectorToSort[j] = b;
-                    vectorToSort[i] = a;
-                    i++;
-                    j--;
+                    vectorToSort.Swap(i, j);
+                    i++; j--;
                 }
             }
-            while (i <= j);
+            while (i < j);
 
-            if (left < j)
-                QuickSort(vectorToSort, left, j);    //wywołanie funkcji przez samą siebie
-            if (right > i)
-                QuickSort(vectorToSort, i, right);   //tu podobnie jak wyżej
+            if (startIndex < j) QuickSort(vectorToSort, startIndex, j);
+            if (endIndex > i) QuickSort(vectorToSort, i, endIndex);
 
             return vectorToSort;
 
@@ -247,11 +240,7 @@ namespace pwr_algorithms.test
                 {
                     if (vectorToSort[i] > vectorToSort[i + 1])
                     {
-                        int a = vectorToSort[i];
-                        int b = vectorToSort[i + 1];
-                        vectorToSort[i] = b;
-                        vectorToSort[i + 1] = a;
-
+                        vectorToSort.Swap(i, i + 1);
                     }
 
                 }
@@ -270,6 +259,8 @@ namespace pwr_algorithms.test
             var tempBaseValue = baseVector[baseIndex];
             baseVector[baseIndex] = baseVector[swapIndex];
             baseVector[swapIndex] = tempBaseValue;
-        }
+        }       
+        
     }
+    
 }
