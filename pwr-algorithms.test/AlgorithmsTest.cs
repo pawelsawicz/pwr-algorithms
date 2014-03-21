@@ -4,14 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NUnit.Framework;
+using System.IO;
 
 
 namespace pwr_algorithms.test
 {
     [TestFixture]
-    public class Class1
+    public class AlgorithmsTest
     {
         private SortAlgorithms _sortAlgorithms { get; set; }
+        private const string _dataPath = "D:\\repos\\pwr-algorithms\\pwr-algorithms.test\\Data\\NumberToSort.txt";
 
         [SetUp]
         public void SetUp()
@@ -89,8 +91,50 @@ namespace pwr_algorithms.test
             //assert
             Assert.AreEqual(expectedVector, result);
         }
+
+        [Test]
+        public void GivenFileOfNumbersThenSplitToIntArray()
+        {
+            //arrange
+            var outputData = File.ReadAllText(_dataPath);
+            int[] expectedArray = {2, 3, 11, 1, 9, 1, 8, 99, 3 };
+            //act
+            var result = ConvertToIntArray(outputData);
+
+            //assert
+            Assert.AreEqual(expectedArray, result);
+        }
+
+        [Test]
+        public void GivenFileOfNumbersThenSort()
+        {
+            //arrange
+            var dataFromFile = File.ReadAllText(_dataPath);
+            var vectorToSort = ConvertToIntArray(dataFromFile);
+            int[] expectedVector = { 1, 1, 2, 3, 3, 8, 9, 11, 99 };
+
+            //act
+            var result = _sortAlgorithms.BubbleSort(vectorToSort);
+
+            //assert
+            Assert.AreEqual(expectedVector, result);
+
+        }
+
+        private int[] ConvertToIntArray(string stringToConvert)
+        {            
+            var stringData = stringToConvert.Split(',');
+            int[] convertedData = new int[stringData.Length];
+
+            for (int i = 0; i < stringData.Length; i++)
+            {
+                int.TryParse(stringData[i], out convertedData[i]);
+            }
+
+            return convertedData;
+        }
         
-    }
+    }   
 
     public static class VectorHelper
     {
