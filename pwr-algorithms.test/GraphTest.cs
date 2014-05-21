@@ -124,9 +124,17 @@ namespace pwr_algorithms.test
             else
             {
                 throw new NotImplementedException();
-            }
+            }            
+        }
 
-            
+        public int[,] GenerateRandomUndirectGraph(int numberOfVertex)
+        {
+            int[,] result = new int[numberOfVertex, numberOfVertex];
+            var upperLimitOfEdges = GetMaximumOfEdges(numberOfVertex) + 1;
+            var lowerLimitOfEdges = GetMinimumOfEdges(numberOfVertex);
+            var randomnumberOfEdges = new Random().Next(lowerLimitOfEdges, upperLimitOfEdges);
+            result = GenerateUndirectGraph(numberOfVertex, randomnumberOfEdges);
+            return result;
         }
 
         public int GetMinimumOfEdges(int numberOfVertex)
