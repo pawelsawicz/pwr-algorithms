@@ -20,7 +20,7 @@ namespace pwr_algorithms.test
             int numberOfVertex = 5;
             int expectedNumberOfEdges = 4;
 
-            int result = numberOfVertex - 1;
+            int result = GetMinimumOfEdges(numberOfVertex);
 
             Assert.AreEqual(expectedNumberOfEdges, result);
         }
@@ -31,9 +31,21 @@ namespace pwr_algorithms.test
             int numberOfVertex = 4;
             int expectedNumberOfEdges = 6;
 
-            int result = (numberOfVertex * (numberOfVertex - 1)) / 2;
+            int result = GetMaximumOfEdges(numberOfVertex);
 
             Assert.AreEqual(expectedNumberOfEdges, result);
+        }
+
+        public int GetMinimumOfEdges(int numberOfVertex)
+        {
+            int result = numberOfVertex - 1;
+            return result;
+        }
+
+        public int GetMaximumOfEdges(int numberOfVertex)
+        {
+            int result = (numberOfVertex * (numberOfVertex - 1)) / 2;
+            return result;
         }
     }
 }
