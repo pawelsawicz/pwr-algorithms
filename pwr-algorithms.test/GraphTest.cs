@@ -14,13 +14,23 @@ namespace pwr_algorithms.test
          * undirected weighted graph 
          */
 
+        private UndirectGraph _undirectGraph;
+        private int _numberOfVertex;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _numberOfVertex = 3;
+            _undirectGraph = new UndirectGraph(_numberOfVertex);
+        }
+
         [Test]
         public void GivenNumberOfVertexThenReturnMinimumNumberOfEdges()
         {
             int numberOfVertex = 5;
             int expectedNumberOfEdges = 4;
 
-            int result = GetMinimumOfEdges(numberOfVertex);
+            int result = _undirectGraph.GetMinimumOfEdges(numberOfVertex);
 
             Assert.AreEqual(expectedNumberOfEdges, result);
         }
@@ -31,7 +41,7 @@ namespace pwr_algorithms.test
             int numberOfVertex = 4;
             int expectedNumberOfEdges = 6;
 
-            int result = GetMaximumOfEdges(numberOfVertex);
+            int result = _undirectGraph.GetMaximumOfEdges(numberOfVertex);
 
             Assert.AreEqual(expectedNumberOfEdges, result);
         }
@@ -43,7 +53,8 @@ namespace pwr_algorithms.test
             int numberOfEgdes = 3;
             int[,] expectedEgdes = { { 0, 1, 1 }, { 1, 0, 1 }, { 1, 1, 0 } };
 
-            var result = GenerateUndirectGraph(numberOfVertex, numberOfEgdes);
+            _undirectGraph.GenerateUndirectGraph(numberOfVertex, numberOfEgdes);
+            var result = _undirectGraph.Connections;
 
             Assert.AreEqual(expectedEgdes, result);
 
@@ -56,7 +67,7 @@ namespace pwr_algorithms.test
             int numberOfEdges = 3;
             bool expectedValue = true;
 
-            var result = ValidateVertexAndEdges(numberOfVertex, numberOfEdges);
+            var result = _undirectGraph.ValidateVertexAndEdges(numberOfVertex, numberOfEdges);
 
             Assert.AreEqual(expectedValue, result);
         }
@@ -68,9 +79,36 @@ namespace pwr_algorithms.test
             int numberOfEdges = 10;
             bool expectedValue = false;
 
-            var result = ValidateVertexAndEdges(numberOfVertex, numberOfEdges);
+            var result = _undirectGraph.ValidateVertexAndEdges(numberOfVertex, numberOfEdges);
 
             Assert.AreEqual(expectedValue, result);
+        }       
+        
+    }
+
+    public class UndirectGraph
+    {
+        public int[,] Connections { get; set; }
+        public int[,] Weights { get; set; }
+
+        private readonly int _numberOfVertex;
+        private int _numberOfEdges;
+
+        public UndirectGraph(int numberOfVertex)
+        {
+            _numberOfVertex = numberOfVertex;            
+        }
+
+        public int GetMinimumOfEdges(int numberOfVertex)
+        {
+            int result = numberOfVertex - 1;
+            return result;
+        }
+
+        public int GetMaximumOfEdges(int numberOfVertex)
+        {
+            int result = (numberOfVertex * (numberOfVertex - 1)) / 2;
+            return result;
         }
 
         public bool ValidateVertexAndEdges(int numberOfVertex, int numberOfEdges)
@@ -88,9 +126,10 @@ namespace pwr_algorithms.test
             }
         }
 
-        public int[,] GenerateUndirectGraph(int numberOfVertex, int numberOfEdges)
+        public void GenerateUndirectGraph(int numberOfVertex, int numberOfEdges)
         {
-            int[,] result = new int[numberOfVertex, numberOfVertex];
+            Connections = new int[numberOfVertex, numberOfVertex];
+            Weights = new int[numberOfVertex, numberOfVertex];
 
             if (ValidateVertexAndEdges(numberOfVertex, numberOfEdges))
             {
@@ -99,54 +138,43 @@ namespace pwr_algorithms.test
                     int yRandom = new Random().Next(1, numberOfVertex);
                     int xRandom = new Random().Next(0, yRandom);
 
-                    while (result[yRandom, xRandom] == 1)
+                    while (Connections[yRandom, xRandom] == 1)
                     {
                         yRandom = new Random().Next(1, numberOfVertex);
                         xRandom = new Random().Next(0, yRandom);
                     }
 
-                    result[yRandom, xRandom] = 1;
+                    Connections[yRandom, xRandom] = 1;
+                    Weights[yRandom, xRandom] = new Random().Next(0, 10);
                 }
 
-                for (int i = 0; i < result.GetLength(0); i++)
+                for (int i = 0; i < Connections.GetLength(0); i++)
                 {
-                    for (int j = 0; j < result.GetLength(1); j++)
+                    for (int j = 0; j < Connections.GetLength(1); j++)
                     {
-                        if (result[i, j] == 1)
+                        if (Connections[i, j] == 1)
                         {
-                            result[j, i] = 1;
+                            Connections[j, i] = 1;
+                            Weights[j, i] = Weights[i, j];
                         }
                     }
                 }
-
-                return result;
             }
             else
             {
                 throw new NotImplementedException();
-            }            
+            }
         }
 
-        public int[,] GenerateRandomUndirectGraph(int numberOfVertex)
-        {
-            int[,] result = new int[numberOfVertex, numberOfVertex];
-            var upperLimitOfEdges = GetMaximumOfEdges(numberOfVertex) + 1;
-            var lowerLimitOfEdges = GetMinimumOfEdges(numberOfVertex);
-            var randomnumberOfEdges = new Random().Next(lowerLimitOfEdges, upperLimitOfEdges);
-            result = GenerateUndirectGraph(numberOfVertex, randomnumberOfEdges);
-            return result;
-        }
+        //public int[,] GenerateRandomUndirectGraph(int numberOfVertex)
+        //{
+        //    int[,] result = new int[numberOfVertex, numberOfVertex];
+        //    var upperLimitOfEdges = GetMaximumOfEdges(numberOfVertex) + 1;
+        //    var lowerLimitOfEdges = GetMinimumOfEdges(numberOfVertex);
+        //    var randomnumberOfEdges = new Random().Next(lowerLimitOfEdges, upperLimitOfEdges);
+        //    result = GenerateUndirectGraph(numberOfVertex, randomnumberOfEdges);
+        //    return result;
+        //}
 
-        public int GetMinimumOfEdges(int numberOfVertex)
-        {
-            int result = numberOfVertex - 1;
-            return result;
-        }
-
-        public int GetMaximumOfEdges(int numberOfVertex)
-        {
-            int result = (numberOfVertex * (numberOfVertex - 1)) / 2;
-            return result;
-        }
     }
 }
